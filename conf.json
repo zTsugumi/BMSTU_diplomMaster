@@ -1,0 +1,15 @@
+{
+  "dir_data": "./data",
+  "dir_log": "./logs",
+  "epochs": 100,
+  "batch_size": 50,
+  "lr": 5e-4,
+  "lr_decay": 0.97,
+  "alpha": 0.392,
+  "input_MNIST": [28, 28, 1],
+  "input_SMALLNORB": [32, 32, 2],
+  "input_CIFAR10": [32, 32, 3],
+  "class_MNIST": 10,
+  "class_SMALLNORB": 5,
+  "class_CIFAR10": 10
+}
