@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import tarfile
 import os
+import math
 
 TAR_NAME = 'cifar-10-python.tar.gz'
 CIFAR10_SIZE = 50000
@@ -13,9 +14,9 @@ def load_cifar10(
     dir='./data/cifar10',
     val_percent=0.1,
 ):
-  n_train = int(CIFAR10_SIZE * (1 - val_percent))
-  n_val = CIFAR10_SIZE - n_train
-  val_index = int(BATCH_SIZE * (1 - val_percent))
+  val_index = math.floor(BATCH_SIZE * (1 - val_percent))
+  n_train = val_index * 5
+  n_val = (BATCH_SIZE - val_index) * 5
 
   x_train = np.empty((n_train, 32, 32, 3), dtype='uint8')
   y_train = np.empty((n_train,), dtype='uint8')

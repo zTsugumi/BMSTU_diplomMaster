@@ -1,7 +1,6 @@
 import json
 from utils import download
-from utils.cifar10 import preprocess_cifar10, generate_tf_cifar10
-from utils.cifar10.cifar_dataset import load_cifar10
+from utils.cifar10 import load_cifar10, preprocess_cifar10, generate_tf_cifar10
 from utils.lfw import load_lfw, preprocess_lfw, generate_tf_lfw
 
 
@@ -10,17 +9,17 @@ class Dataset(object):
   This constructs functions to process dataset
   '''
 
-  def __init__(self, data_name, conf_path='conf.json', custom_dir='', dl=False):
+  def __init__(self, data_name, conf_path='conf.json', custom_dir='', dl=False, val_percent=0.1):
     self.data_name = data_name
     self.conf_path = conf_path
     self.load_config()
-    self.load_dataset(custom_dir, dl)
+    self.load_dataset(custom_dir, dl, val_percent)
 
   def load_config(self):
     with open(self.conf_path) as f_conf:
       self.conf = json.load(f_conf)
 
-  def load_dataset(self, custom_dir, dl=False):
+  def load_dataset(self, custom_dir, dl, val_percent):
     try:
       if self.data_name == 'LFW':
         dir = custom_dir if custom_dir else './data/lfw'
@@ -37,8 +36,8 @@ class Dataset(object):
         if dl:
           download.download_cifar10(dir)
 
-        (self.x_train, self.y_train), (self.x_val, self.y_val), (self.x_test_orig, self.y_test) = \
-            load_cifar10(dir)
+        (self.x_train, self.y_train), (self.x_val, self.y_val), (self.x_test_orig, self.y_test) =\
+            load_cifar10(dir, val_percent)
 
         self.x_train, self.y_train = preprocess_cifar10(
             self.x_train, self.y_train)
@@ -64,12 +63,13 @@ class Dataset(object):
           self.conf['batch_size']
       )
     elif self.data_name == 'CIFAR10':
-      data_train, data_test = preprocess_cifar10.generate_tf_cifar10(
+      data_train, data_val, data_test = generate_tf_cifar10(
           self.x_train, self.y_train,
+          self.x_val, self.y_val,
           self.x_test, self.y_test,
           self.conf['batch_size']
       )
     else:
       raise RuntimeError(f'data_name {self.data_name} not recognized')
 
-    return data_train, data_test
+    return data_train, data_val, data_test
