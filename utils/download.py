@@ -1,4 +1,3 @@
-import tensorflow as tf
 import traceback
 import time
 import os
@@ -91,3 +90,21 @@ def download_cifar10(data_dir='./data/cifar10'):
           'cifar-10-python.tar.gz'
       ],
       data_dir)
+
+
+# def download_voxceleb(data_dir='./data/voxceleb'):
+#   sequential_downloader(
+#       'https://www.cs.toronto.edu/~kriz/',
+#       [
+#           'cifar-10-python.tar.gz'
+#       ],
+#       data_dir)
+
+
+# def download_exercise(data_dir='./data/exercise'):
+#   sequential_downloader(
+#       'http://psd.csail.mit.edu/models/',
+#       [
+#           'snapshot.pth'
+#       ],
+#       data_dir)

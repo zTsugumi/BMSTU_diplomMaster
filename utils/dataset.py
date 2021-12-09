@@ -2,7 +2,7 @@ import json
 from . import download
 from .cifar10 import load_cifar10, preprocess_cifar10, generate_tf_cifar10
 from .lfw import load_lfw, preprocess_lfw, generate_tf_lfw
-from .geo import generate, load_geo, generate_tf_geo
+from .geo import build_image, load_geo, generate_tf_geo
 
 
 class Dataset(object):
@@ -135,7 +135,7 @@ class DatasetGEO(Dataset):
         dir = custom_dir if custom_dir else './data/geo'
 
         if gen:
-          generate(dir)
+          build_image(dir)
 
         self.data_train, self.data_val, self.data_test =\
             load_geo(dir, val_percent=val_percent, test_percent=test_percent)

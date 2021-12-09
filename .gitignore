@@ -3,3 +3,4 @@ _img_test/
 .ipynb_checkpoints/
 logs/
 /data
+.vscode

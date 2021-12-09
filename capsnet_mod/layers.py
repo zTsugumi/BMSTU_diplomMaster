@@ -1,7 +1,8 @@
 import tensorflow as tf
+import tensorflow.keras as keras
 import numpy as np
 
-EPS = tf.keras.backend.epsilon()
+EPS = keras.backend.epsilon()
 
 
 def safe_norm(s, axis=-1, keepdims=True):
@@ -21,7 +22,7 @@ def squash(s):
   return (1.0 - 1.0/tf.exp(norm)) * (s / norm)
 
 
-class PrimaryCaps(tf.keras.layers.Layer):
+class PrimaryCaps(keras.layers.Layer):
   '''
   This constructs a primary capsule layer using regular convolution layer
   '''
@@ -48,7 +49,7 @@ class PrimaryCaps(tf.keras.layers.Layer):
     return (None, (H - self.k)/self.s + 1, (W - self.k)/self.s + 1, self.C, self.L)
 
   def build(self, input_shape):
-    self.DW_Conv = tf.keras.layers.Conv2D(
+    self.DW_Conv = keras.layers.Conv2D(
         filters=self.C*self.L,
         kernel_size=self.k,
         strides=self.s,
@@ -63,12 +64,12 @@ class PrimaryCaps(tf.keras.layers.Layer):
   def call(self, input):
     x = self.DW_Conv(input)
     H, W = x.shape[1:3]
-    x = tf.keras.layers.Reshape((H, W, self.C, self.L))(x)
+    x = keras.layers.Reshape((H, W, self.C, self.L))(x)
     x = squash(x)
     return x
 
 
-class DigitCaps(tf.keras.layers.Layer):
+class DigitCaps(keras.layers.Layer):
   '''
   This contructs the modified digit capsule layer
   '''
@@ -130,7 +131,7 @@ class DigitCaps(tf.keras.layers.Layer):
     return v
 
 
-class Length(tf.keras.layers.Layer):
+class Length(keras.layers.Layer):
   '''
   This constructs the computation of the length of each capsule in a layer
   '''
@@ -146,7 +147,7 @@ class Length(tf.keras.layers.Layer):
     return safe_norm(input, axis=-1, keepdims=False)
 
 
-class Mask(tf.keras.layers.Layer):
+class Mask(keras.layers.Layer):
   '''
   This constructs the mask operation
   '''

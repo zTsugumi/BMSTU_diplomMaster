@@ -1,11 +1,15 @@
 {
   "dir_data": "./data",
   "dir_log": "./logs",
-  "epochs": 100,
+
+  "epochs": 1000,
   "batch_size": 50,
   "lr": 5e-4,
   "lr_decay": 0.97,
   "alpha": 0.392,
+
   "input_CIFAR10": [32, 32, 3],
-  "class_CIFAR10": 10
+  "class_CIFAR10": 10,
+
+  "input_GEO": [128, 128, 3]
 }

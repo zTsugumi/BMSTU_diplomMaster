@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from utils.image_ops import imread, imresize
+from utils.ops_image import imread, imresize
 
 
 def load_geo(

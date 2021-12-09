@@ -1,11 +1,10 @@
-import argparse
 import numpy as np
 import cv2
 import os
 from numpy.random import randint
 from multiprocessing import Pool
 from tqdm import tqdm
-from utils.image_ops import mkdir, imresize, imwrite
+from utils.ops_image import mkdir, imresize, imwrite
 
 
 class Node:
@@ -99,8 +98,8 @@ class Canvas:
       obj.render(image, flow)
 
     if size is not None:
-      image = imresize(image, size=size)
-      flow = imresize(flow, size=size) / self.size * size
+      image = imresize(image, size=(size, size))
+      flow = imresize(flow, size=(size, size)) / self.size * size
 
     return image, flow
 
@@ -181,7 +180,7 @@ def process(args):
   np.save(os.path.join(data_path, '{0}_f.npy'.format(index)), flow)
 
 
-def generate(data_path):
+def build_image(data_path):
   # data path
   mkdir(data_path, clean=True)
 
@@ -192,11 +191,12 @@ def generate(data_path):
   with open(os.path.join(data_path, 'demo.txt'), 'w') as fp:
     for k in range(num_demo):
       print(k + 1, file=fp)
-      tasks.append([k + 1, data_path])
+      tasks.append(k + 1)
+  tasks = ([task, data_path] for task in tasks)
 
   # process
-  n_workers = 32
+  n_workers = 8
   pool = Pool(processes=n_workers)
-  with tqdm(total=len(tasks)) as progress:
+  with tqdm(total=num_demo) as progress:
     for _ in pool.imap_unordered(process, tasks):
       progress.update()
